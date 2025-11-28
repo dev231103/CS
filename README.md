@@ -5,3 +5,6 @@
 | SC - 3 | To create your own syslog Server. |
 | SC - 4 | To install and run Splunk on Linux. |
 | SC - 5 | To install and configure ELK on Linux. |
+
+
+#Link for lab.support.files: https://mega.nz/file/bYJTBaJK#XOK8Ant7fqTpuiM2EZoqYyW23EDV9kt5MyWb8Hr6MD4 
