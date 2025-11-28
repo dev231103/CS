@@ -1,0 +1,162 @@
+============================================================================
+A. Part 1: To use Wireshark to examine HTTP and HTTPS Traffic 
+===========================================================================
+
+ip address 
+
+sudo tcpdump -i eth0 -s 0 -w ~/httpdump.pcap 
+
+
+http://testphp.vulnweb.com/login.php  {Open this in firefox browser in Kali}
+
+
+Enter any random username and password
+
+
+In terminal, 
+
+wireshark httpdump.pcap
+
+
+Apply http filter:
+
+http
+
+
+
+Expand the HTML Form URL 
+Encoded: application/x-www-form-urlencoded section.
+
+
+
+============================================================================
+A. Part2 To use Wireshark to examine HTTP and HTTPS Traffic
+===========================================================================
+
+sudo tcpdump -i eth0 -s 0 -w ~/httpsdump.pcap
+
+
+Open website on firefox
+
+https://www.netacad.com 
+
+
+ 
+In terminal,
+
+sudo wireshark httpsdump.pcap
+
+
+Apply filter,
+
+tcp.port = = 443
+
+
+
+
+============================================================================
+ Exploring Processes, Threads, Handles, and Windows Registry 
+===========================================================================
+
+
+Step 1: Download Windows SysInternals Suite. 
+a. Navigate to the following link to download Windows SysInternals Suite: 
+https://technet.microsoft.com/en-us/sysinternals/bb842062.aspx 
+ 
+b. After the download is completed, extract the files from the folder. 
+c. Leave the web browser open for the following steps. 
+
+
+
+ 
+Step 2: Explore an active process. 
+a. Navigate to the SysinternalsSuite folder with all the extracted files. 
+b. Open procexp.exe. Accept the Process Explorer License Agreement when prompted. 
+ 
+c. The Process Explorer displays a list of currently active processes. 
+ 
+d. Drag this icon      to the web browser to view it in process explorer. In this example 
+the icon was dragged to Google Chrome:  
+ 
+e. The Microsoft Edge process can be terminated in the Process Explorer. Right-click the 
+selected process and select Kill Process. 
+
+
+ 
+Step 3: Start another process. 
+a. Open a Command Prompt. (Start > search Command Prompt > select Command 
+Prompt) 
+b. Drag the Find Window’s Process icon        into the Command Prompt window and 
+locate the highlighted Command Prompt process in Process Explorer. 
+c. The process for the Command Prompt is cmd.exe. Its parent process is explorer.exe 
+process. The cmd.exe has a child process, conhost.exe. 
+  
+d. Navigate to the Command Prompt window. Start a ping at the prompt and 
+observe the changes under the cmd.exe process. 
+
+e. As you review the list of active processes, you find that the child process 
+conhost.exe may be suspicious.  To check for malicious content, right
+click conhost.exe and select Check VirusTotal. When prompted, 
+click Yes to agree to VirusTotal Terms of Service. Then click OK for the 
+next prompt. 
+ 
+ 
+f. Expand the Process Explorer window or scroll to the right until you see the 
+VirusTotal column. Click the link under the VirusTotal column. The default web 
+browser opens with the results regarding the malicious content of conhost.exe. 
+g. Right-click the cmd.exe process and select Kill Process. 
+
+ 
+=================================================================================== 
+Part 2: Exploring Threads and Handles 
+
+----------------------------------------------------------------------------------
+ 
+Step 1: Explore threads. 
+a. Open a command prompt. 
+b. In Process Explorer window, right-click conhost.exe and Select Properties….. Click 
+the Threads tab to view the active threads for the conhost.exe process. 
+
+ 
+c. Examine the details of the thread. What type of information is available in the 
+Properties window? 
+Information available includes environment variable, security information, 
+performance information, and printable strings. 
+ 
+Step 2: Explore handles. 
+a. In the Process Explorer, click View > select Show Lower Pane > Handles to view 
+the handles associated with the conhost.exe process. 
+ 
+================================================================================= 
+Part 3: Exploring Windows Registry 
+The Windows Registry is a hierarchical database that stores most of the operating systems 
+and desktop environment configuration settings. In this part, you will 
+ 
+a. To access the Windows Registry, click Start > Search for regedit and select Registry 
+Editor. Click Yes when asked to allow this app to make changes. 
+ 
+ 
+b. In a previous step, you had accepted the EULA(End-User License Agreement) for 
+Process Explorer. Navigate to the EulaAccepted registry key for Process Explorer. 
+ 
+Click to select Process Explorer in HKEY_CURRENT_USER > Software > Sysinternals > 
+Process Explorer. Scroll down to locate the key EulaAccepted. Currently, the value for the 
+registry key EulaAccepted is 0x00000001(1). 
+  
+ 
+c. Double-click EulaAccepted registry key. Currently the value data is set to 1. The value 
+of 1 indicates that the EULA has been accepted by the user. 
+ 
+ 
+ 
+d. Change the 1 to 0 for Value data. The value of 0 indicates that the EULA was not 
+accepted. Click OK to continue. 
+ 
+ 
+What is value for this registry key in the Data column? 
+0x00000000(0) 
+ 
+e. Open the Process Explorer. Navigate to the folder where you have downloaded 
+SysInternals. Open the folder SysInternalsSuite > Open procexp.exe. 
+ 
+
