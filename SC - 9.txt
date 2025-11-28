@@ -1,35 +1,194 @@
-=================================================================
 
-To Install and Run Splunk on Linux 
+==========================================================================
 
-=================================================================
+ Install and Configure ELK Stack (Elasticsearch, Logstash, and Kibana) on Linux 
 
+=========================================================================
 
-cd /tmp && wget https://download.splunk.com/products/splunk/releases/7.1.1/linux/splunk-7.1.1-8f0ead9ec3db-linux-2.6-amd64.deb
+sudo apt update && sudo apt upgrade -y 
 
-
-sudo dpkg -i /tmp/splunk-7.1.1-8f0ead9ec3db-linux-2.6-amd64.deb 
-
+sudo apt install openjdk-11-jdk -y 
 
 
-sudo /opt/splunk/bin/splunk enable boot-start --accept-license
+java -version 
 
 
-
-#Set Password = Splunk123!
-
+curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elastic.gpg
 
 
-sudo /opt/splunk/bin/splunk start
+echo "deb [signed-by=/usr/share/keyrings/elastic.gpg] https://artifacts.elastic.co/packages/7.x/apt stable main" \
+| sudo tee /etc/apt/sources.list.d/elastic-7.x.list
 
 
+sudo apt update
 
-## The Splunk web interface is at http://kali:8000. (or click on the link provided in the terminal). ##
 
+sudo apt install elasticsearch -y
 
 
 
+sudo nano /etc/elasticsearch/elasticsearch.yml
 
-##Enter Username and Password and click sign in ##
-Username: Admin 
-Password : Splunk123!
+
+#Add this line in the file then press ctrl + o enter Ctrl+ X#
+network.host: localhost
+
+
+sudo systemctl start elasticsearch
+sudo systemctl enable elasticsearch
+
+
+curl -X GET "localhost:9200"
+
+
+
+------------------------------------------------------------------------------------
+Part 2: Kibana
+
+
+sudo apt install kibana -y
+
+
+sudo systemctl enable kibana
+sudo systemctl start kibana
+
+
+echo "admin:$(openssl passwd -apr1 kali)" | sudo tee /etc/nginx/htpasswd.users
+
+
++---------------------+
+|Username = admin     |   {This is not a command, these are login details needed later}
+|Password = kali      |
++---------------------+
+
+
+sudo nano /etc/nginx/sites-available/kibana
+
+
+server {
+    listen 80;
+    server_name 127.0.0.1;
+
+    auth_basic "Restricted Access";
+    auth_basic_user_file /etc/nginx/htpasswd.users;
+
+    location / {
+        proxy_pass http://localhost:5601;
+        proxy_http_version 1.1;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+
+===============================
+Save (CTRL+O → ENTER → CTRL+X)
+===============================
+
+
+sudo ln -s /etc/nginx/sites-available/kibana /etc/nginx/sites-enabled/kibana
+
+
+sudo nginx -t
+
+
+sudo systemctl enable nginx
+sudo systemctl restart nginx
+
+
+===============================
+Open link in browser: 
+http://127.0.0.1/status
+
+with these details:
+
++---------------------+
+|Username = admin     |  
+|Password = kali      |
++---------------------+
+
+========================================
+
+
+
+
+-------------------------------------------------------------------------------------------
+Part 3: Install Logstash
+
+
+sudo apt install logstash -y
+
+sudo nano /etc/logstash/conf.d/02-beats-input.conf
+
+
+===============
+
+Paste: 
+===============
+
+
+input {
+  beats {
+    port => 5044
+  }
+}
+
+===============================
+Save (CTRL+O → ENTER → CTRL+X)
+===============================
+
+sudo nano /etc/logstash/conf.d/30-elasticsearch-output.conf
+
+===============
+
+Paste: 
+===============
+
+output {
+  if [@metadata][pipeline] {
+    elasticsearch {
+      hosts => ["localhost:9200"]
+      manage_template => false
+      index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+      pipeline => "%{[@metadata][pipeline]}"
+    }
+  } else {
+    elasticsearch {
+      hosts => ["localhost:9200"]
+      manage_template => false
+      index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+    }
+  }
+}
+
+
+===============================
+Save (CTRL+O → ENTER → CTRL+X)
+===============================
+
+
+
+sudo -u logstash /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
+
+
+
+sudo systemctl start logstash
+sudo systemctl enable logstash
+
+
+sudo ss -tlnp | grep 5044
+
+
+
+
+
+
+
+
+
+
+
