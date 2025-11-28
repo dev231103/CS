@@ -1,0 +1,105 @@
+===================================================================
+A. Encrypting and decrypting data using a hacker tool
+===================================================================
+
+
+mkdir Zip-Files
+
+
+cd Zip-Files 
+echo This is a sample text file > sample-1.txt 
+echo This is a sample text file > sample-2.txt 
+echo This is a sample text file > sample-3.txt 
+
+
+ls
+
+
+zip -e file-1.zip sample* 
+
+ls
+
+
+unzip file-1.zip 
+
+sudo apt install fcrackzip 
+
+
+fcrackzip -vul 1-4 file-1.zip 
+
+
+
+
+
+===================================================================
+B. Encrypting and Decrypting Data Using OpenSSL 
+===================================================================
+
+
+mkdir OpenSSL 
+cd OpenSSL
+
+
+sudo nano letter_to_grandma.txt 
+
+
+
+Hi Grandma, 
+I am writing this letter to thank you for the chocolate chip cookies you sent 
+me. I got them this morning and I have already eaten half of the box! They 
+are absolutely delicious! 
+ 
+I wish you all the best. Love, 
+Your cookie-eater grandchild. 
+
+
+
+
+cat letter_to_grandma.txt 
+
+
+openssl aes-256-cbc -in letter_to_grandma.txt -out message.enc 
+
+
+cat message.enc
+
+
+openssl aes-256-cbc -d -in message.enc -out decrypted_letter.txt 
+
+
+cat decrypted_letter.txt 
+
+
+
+
+
+===================================================================
+C. Hashing a text file with openssl and verifying hashes (hash- a fixed-size, 
+unique string of characters) 
+===================================================================
+
+
+cat letter_to_grandma.txt 
+
+
+openssl sha256 letter_to_grandma.txt
+
+
+openssl sha512 letter_to_grandma.txt 
+
+sha256sum letter_to_grandma.txt 
+sha512sum letter_to_grandma.txt 
+
+
+dd if=/dev/zero of=sample.img bs=1M count=1 
+
+sha256sum sample.img > sample.img_SHA256.sig 
+
+cat sample.img_SHA256.sig 
+
+
+sha256sum sample.img 
+
+
+
+
