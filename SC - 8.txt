@@ -1,0 +1,35 @@
+=================================================================
+
+To Install and Run Splunk on Linux 
+
+=================================================================
+
+
+cd /tmp && wget https://download.splunk.com/products/splunk/releases/7.1.1/linux/splunk-7.1.1-8f0ead9ec3db-linux-2.6-amd64.deb
+
+
+sudo dpkg -i /tmp/splunk-7.1.1-8f0ead9ec3db-linux-2.6-amd64.deb 
+
+
+
+sudo /opt/splunk/bin/splunk enable boot-start --accept-license
+
+
+
+#Set Password = Splunk123!
+
+
+
+sudo /opt/splunk/bin/splunk start
+
+
+
+## The Splunk web interface is at http://kali:8000. (or click on the link provided in the terminal). ##
+
+
+
+
+
+##Enter Username and Password and click sign in ##
+Username: Admin 
+Password : Splunk123!

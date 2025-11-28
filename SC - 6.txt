@@ -1,0 +1,62 @@
+===================================================================================
+To create your own syslog Server. 
+==================================================================================
+
+
+sudo apt update 
+sudo apt install rsyslog -y 
+
+
+sudo systemctl status rsyslog 
+
+
+sudo nano /etc/rsyslog.conf 
+
+
+
+##Uncomment the following##
+
+module(load="imudp") 
+input(type="imudp" port="514") 
+module(load="imtcp") 
+input(type="imtcp" port="514")
+
+
+##Scroll to the bottom and add the following##
+
+# Remote logging section (store logs from remote 
+clients) 
+$template 
+RemoteLogs,"/var/log/remote_logs/%HOSTNAME%.log" 
+*.* ?RemoteLogs 
+& stop 
+# Forward all logs via UDP to remote syslog server: 
+*.* @192.168.1.10:514 
+# Forward all logs via TCP to remote syslog server: 
+*.* @@192.168.1.10:514
+
+
+##Press CTRL + O →Enter→CTRL + X to confirm the configurations##
+
+
+sudo mkdir /var/log/remote_logs 
+sudo chmod 755 /var/log/remote_logs 
+
+
+
+sudo systemctl restart rsyslog 
+sudo systemctl enable rsyslog 
+
+
+
+sudo netstat -tulpn | grep 514
+
+
+
+
+
+
+
+
+
+
