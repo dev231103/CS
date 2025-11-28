@@ -1,12 +1,7 @@
-## 📚 Table of Contents
-
-1. [Encrypt & Decrypt Data Using a Hacker Tool](#encrypt--decrypt-data-using-a-hacker-tool)
-2. [Encrypt & Decrypt Data Using OpenSSL](#encrypt--decrypt-data-using-openssl)
-3. [Hash a Text File with OpenSSL & Verify Hashes](#hash-a-text-file-with-openssl--verify-hashes)
-
-4. [Examine HTTP & HTTPS Traffic Using Wireshark](#examine-http--https-traffic-using-wireshark)
-5. [Explore Processes, Threads, Handles & Windows Registry](#explore-processes-threads-handles--windows-registry)
-
-6. [Create Your Own Syslog Server](#create-your-own-syslog-server)
-7. [Install & Run Splunk on Linux](#install--run-splunk-on-linux)
-8. [Install & Configure ELK Stack on Linux](#install--configure-elk-stack-on-linux)
+| Sr. No. | Practical                                                                                                                                                                   |
+|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SC - 1 | a. To encrypt and decrypt Data Using a Hacker Tool. b. To encrypt and decrypt Data Using OpenSSL. c. To Hash a Text File with OpenSSL and Verifying Hashes                 |
+| SC - 2 | a. To use Wireshark to examine HTTP and HTTPS Traffic. b. To explore Processes, Threads, Handles, and Windows Registry.                                                     |
+| SC - 3 | To create your own syslog Server.                                                                                                                                            |
+| SC - 4 | To install and run Splunk on Linux.                                                                                                                                          |
+| SC - 5 | To install and configure ELK on Linux.                                                                                                                                       |
