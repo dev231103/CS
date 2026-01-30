@@ -1,0 +1,98 @@
+To perform a practical to Attack on a mySQL Database by using PCAP file 
+Procedure: 
+Step 1:  Open Terminal and open the lab.support.files and locate the SQL_Lab.pcap 
+file: 
+cd lab.support.files     
+ls 
+ 
+Step 2:  Open SQL_Lab.pcap in Wireshark to examine the captured network traffic. 
+wireshark SQL_Lab.pcap & 
+a.  The PCAP file opens within Wireshark and displays the captured network traffic. 
+This capture file extends over an 8-minute (441 second) period, the duration of 
+this SQL injection attack 
+ 
+ 
+Step 3:  Within the Wireshark capture, right-click line 13 and select Follow > HTTP Stream. 
+Line 13 was chosen because it is a GET HTTP request. This will be very helpful in 
+following the data stream as the application layers sees it and leads up to the query 
+testing for the SQL injection 
+
+Step 4:  The source traffic is shown in red. The source has sent a GET request to host 
+10.0.2.15. In blue, the destination device is responding back to the source. 
+ 
+Step 5:   In the Find field, enter 1=1. Click Find Next. 
+ 
+ 
+ 
+ 
+Explanation: The attacker has entered a query (1=1) into a UserID search box on the 
+target 10.0.2.15 to see if the application is vulnerable to SQL injection. Instead of the 
+application responding with a login failure message, it responded with a record from a 
+database. The attacker has verified they can input an SQL command and the database 
+will respond. The search string 1=1 creates an SQL statement that will be always true. In 
+the example, it does not matter what is entered into the field, it will always be true. 
+ 
+Step 6:  Close the HTTP stream window. In the next step, you will be viewing the 
+continuation of an attack.
+
+Step 7:  Within the Wireshark capture, right-click line 19, and click Follow > HTTP Stream. 
+In the Find field, enter 1=1. Click Find Next. 
+ 
+ 
+ 
+ 
+Step 8:  The attacker has entered a query (1’ or 1=1 union select database(), user()#) into a UserID 
+search box on the target 10.0.2.15. Instead of the application responding with a login failure 
+message, it responded with the following information: 
+ 
+The database name is dvwa and the database user is root@localhost. There are also multiple 
+user accounts being displayed. 
+
+Step 9:  Close the Follow HTTP Stream window and Click Clear display filter to display 
+the entire Wireshark conversation 
+ 
+Step 10: Within the Wireshark capture, right-click line 22 and select Follow > HTTP 
+Stream. In red, the source traffic is shown and is sending the GET request to host 
+10.0.2.15. In blue, the destination device is responding back to the source. 
+ 
+ 
+ 
+Step 11: In the Find field, enter 1=1. Click Find Next. 
+Explanation: The attacker has entered a query (1’ or 1=1 union select null, version ()#) into 
+a UserID search box on the target 10.0.2.15 to locate the version identifier. Notice how the 
+version identifier is at the end of the output right before the </pre>.</div> closing HTML 
+code. 
+Step 12: Close the Follow HTTP Stream window and click Clear display filter to 
+display the entire Wireshark conversation 
+The attacker knows that there is a large number of SQL tables that are full of information. 
+The attacker attempts to find them. 
+
+
+Step 13: Within the Wireshark capture, right-click on line 25 and select Follow > 
+HTTP Stream. The source is shown in red. It has sent a GET request to host 10.0.2.15. 
+In blue, the destination device is responding back to the source. 
+ 
+Step 14: In the Find field, enter users. Click Find Next. 
+ 
+The attacker has entered a query (1’or 1=1 union select null, table_name from 
+information_schema.tables#) into a UserID search box on the target 10.0.2.15 to view all the 
+tables in the database. This provides a huge output of many tables, as the attacker specified 
+“null” without any further specifications.
+
+What would the modified command of (1′ OR 1=1 UNION SELECT null, column_name 
+FROM INFORMATION_SCHEMA.columnsWHERE table_name=’users’) do for the 
+attacker? 
+→ The database would respond with a much shorter output filtered by the occurrence of 
+the word “users”. 
+The attack ends with the best prize of all; password hashes.  
+Step 15: Within the Wireshark capture, right-click line 28 and select Follow > HTTP 
+Stream. The source is shown in red. It has sent a GET request to host 10.0.2.15. In blue, the 
+destination device is responding back to the source. 
+Click Find and type in 1=1. Search for this entry.  
+ 
+As seen above the password hashes for certain users are visible, using a website such 
+as https://crackstation.net/, copy the password hash into the password hash cracker to reveal 
+the plain-text password. 
+Hashed Password: 8d3533d75ae2c3966d7e0d4fcc69216b 
+Cracked Password from the Hash: 
+

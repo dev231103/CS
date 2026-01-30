@@ -1,0 +1,122 @@
+Objective: 3A. To demonstrate Extract an Executable from a PCAP. 
+Procedure: 
+Pre-requisites: For this practical you need the lab.support.files folder, which you can 
+download from here:   
+https://mega.nz/file/bYJTBaJK#XOK8Ant7fqTpuiM2EZoqYyW23EDV9kt5MyWb8Hr6MD4
+Once downloaded extract the folder. 
+        Step 1: Change directory to the lab.support.files/pcaps folder, and get a listing of files 
+using the ls command 
+cd lab.support.files/pcaps 
+ls 
+ 
+Step 2: Issue the command below to open the nimda.download.pcap file in 
+Wireshark. 
+wireshark nimda.download.pcap 
+Step 3: The nimda.download.pcap file contains the packet capture related to the 
+malware download performed in a previous lab. The pcap contains all the packets 
+sent and received while tcpdump was running. Select the fourth packet in the capture 
+and expand the Hypertext Transfer Protocol to display as shown below. 
+ 
+Packets one through three are the TCP handshake. The fourth packet shows the request for 
+the malware file. Confirming what was already known, the request was done over HTTP, 
+sent as a GET request
+
+
+Step 4: Because HTTP runs over TCP, it is possible to use Wireshark’s Follow TCP 
+Stream feature to rebuild the TCP transaction. Select the first TCP packet in the 
+capture, a SYN packet. Right-click it and choose Follow > TCP Stream. 
+ 
+Wireshark displays another window containing the details for the entire selected TCP flow. 
+
+
+Step 5: Click Close in the Follow TCP Stream window to return to the Wireshark  
+nimda.download.pcap file. 
+ 
+Part 2: Extract Downloaded Files from PCAP 
+Because capture files contain all packets related to traffic, a PCAP of a download can be 
+used to retrieve a previously downloaded file.  
+Follow the steps below to use Wireshark to retrieve the Nimda -malware. 
+ 
+Step 1: In that fourth packet in the nimda.download.pcap file, notice that the HTTP 
+GET request was generated from 209.165.200.235 to 209.165.202.133. The Info 
+column also shows this is in fact the GET request for the file. 
+ 
+Step 2: With the GET request packet selected, navigate to File > Export Objects > 
+HTTP,  
+
+
+from Wireshark’s menu 
+ 
+Step 3: Wireshark will display all HTTP objects present in the TCP flow that contains 
+the GET request. In this case, only the Nimda.Amm.exe file is present in the capture. It 
+will take a few seconds before the file is displayed. 
+ 
+Step 4: In the HTTP object list window, select the Nimda.Amm.exe file and click Save 
+As at 
+ the bottom of the screen. 
+Step 5: Click the left arrow until you see the Home Click Home and then click the 
+analyst 
+ folder (if analyst folder doesn’t exist create a folder and name it “analyst”). Save the 
+file there. 
+Step 6: Return to your terminal window and ensure the file was saved. Change 
+directory to the 
+ /home/analyst folder and list the files in the folder using the ls command 
+cd home/analyst 
+ls 
+   
+ 
+Step 7: The file command gives information on the file type. Use the file command to 
+learn a 
+little more about the malware, as show below: 
+file W32.Nimda.Amm.exe 
+
+3B. To Demonstrate a practical for exploring DNS Traffic 
+Part 1: Capture DNS Traffic 
+Step 1: Download and install Wireshark. a. Download the latest stable version of Wireshark 
+from www.wireshark.org. Choose the software version you need based on your PC’s 
+architecture and operating system. 
+1) In Windows, enter ipconfig /flushdns in Command Prompt 
+ 
+2) At a command prompt or terminal, type nslookup enter the interactive mode. Enter 
+the domain name of a website. The domain name www.cisco.com is used in this 
+example. 
+ 
+3) Type exit when finished. Close the command prompt. 
+Part 2: Explore DNS Query Traffic 
+a. Observe the traffic captured in the Wireshark Packet List pane. Enter udp.port ==53 
+in the filter box and click the arrow (or press enter) to display only DNS packets. 
+ 
+b. Select the DNS packet contains Standard query and A www.cisco.com in the Info 
+column 
+
+. In the Packet Details pane, notice this packet has Ethernet II, Internet Protocol 
+Version 4, User Datagram Protocol and Domain Name System (query). 
+ 
+ 
+d. Expand Ethernet II to view the details. Observe the source and destination fields. 
+ 
+e.  Expand the User Datagram Protocol. Observe the source and destination ports. 
+ 
+ 
+       f. Determine the IP and MAC address of the PC. 
+1. In a Windows command prompt, enter arp –a and ipconfig /all to record the 
+MAC and IP addresses of the PC. 
+ 
+For Linux and macOS PC, enter ifconfig or ip address in a terminal. 
+ 
+ 
+ 
+f. Expand Domain Name System (query) in the Packet Details pane. Then expand 
+the Flags and Queries.  
+ 
+ 
+Part 3: Explore DNS Response Traffic 
+a. Select the corresponding response DNS packet has Standard query 
+response and A www.cisco.com in the Info column.
+
+
+b.Expand Domain Name System (response). Then expand the Flags, Queries, 
+and Answers, observe the results. 
+ 
+ 
+c. Observe the CNAME and A records in the Answers details.
