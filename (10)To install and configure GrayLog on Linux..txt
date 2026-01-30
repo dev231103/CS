@@ -1,0 +1,76 @@
+ To install and configure GrayLog on Linux. 
+Procedure: 
+Step 1: Update system 
+sudo apt update && sudo apt upgrade -y 
+Step 2: Install Java 
+sudo apt install openjdk-21-jdk -y 
+Step 3: Install, start & enable MongoDB 
+sudo apt install -y mongodb 
+sudo systemctl enable mongodb 
+sudo systemctl start mongodb 
+ Check whether mongodb is running: (should be active(running)) 
+sudo systemctl status mongodb 
+ 
+Step 4: Verify whether elasticsearch is running 
+ 
+Step 5: Install Graylog 
+wget 
+https://packages.graylog2.org/repo/packages/graylo
+g-4.3-repository_latest.deb 
+Install repo: 
+sudo dpkg -i graylog-4.3-repository_latest.deb 
+sudo apt update
+
+
+Install graylog server: 
+sudo apt install graylog-server -y 
+  
+Step 6: Generate secrets and password 
+Generate admin password hash 
+echo -n admin123 | sha256sum 
+The generated hash will be root_password_sha2 
+Generate password_secret: 
+sudo pwgen -N 1 -s 96 
+  The generated hash will be password_secret 
+Copy both hashes and save in notepad 
+Output: 
+┌──(kali㉿kali)-[~] 
+└─$ echo -n admin123 | sha256sum 
+240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa8
+22809f74c720a9                                                                                                               
+┌──(kali㉿kali)-[~] 
+└─$ sudo pwgen -N 1 -s 96 
+
+
+uVShhuVXBjUjOu4wKvLZEzgSIBkxYFGN8EocOGTjm3aY0Yj05r
+RUmbjRJl578pPV0mmln7tsdsRqLgDTjdT9HPU34DrKH9h0 
+Step 7: Configure Graylog 
+sudo nano /etc/graylog/server/server.conf 
+Set the following according to the hashes generated in your terminal 
+password_secret = 
+uVShhuVXBjUjOu4wKvLZEzgSIBkxYFGN8EocOGTjm3aY0Yj05rRUmbjRJl57
+8pPV0mmln7tsdsRqLgDTjdT9HPU34DrKH9h0 
+ 
+root_password_sha2 = 
+240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c7
+20a9
+
+
+Now Scroll down in the same nano window and set the http_bind_address to 
+127.0.0.1:9000 
+  
+Ctrl + O → Enter →Ctrl + X 
+Step 8: Start and enable graylog server 
+sudo systemctl daemon-reload 
+sudo systemctl start graylog-server 
+sudo systemctl enable graylog-server 
+Step 9: Start Logging 
+sudo tail -n 50 /var/log/graylog-server/server.log 
+ 
+     Step 10: Open the link on firefox: 
+https://127.0.0.1:9000 
+Enter username: admin 
+Password: admin123
+
+
+
