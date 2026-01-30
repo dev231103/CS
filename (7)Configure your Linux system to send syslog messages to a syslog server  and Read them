@@ -1,0 +1,15 @@
+Objective: To configure your Linux system to send syslog messages to a syslog server and 
+read them.  
+Procedure: 
+Step 1: Ensure all steps in Practical 5, were correctly executed 
+Step 2: Verify whether syslog server is running: 
+sudo systemctl status rsyslog 
+ 
+Step 3: Start Logging in a new terminal window 
+sudo tail -f /var/log/remote_logs/kali.log 
+   
+Step 4: Return to previous terminal and send a log message: 
+logger -n 127.0.0.1 -P 514 "Test message from 
+client"  
+Step 5: The log message will be visible in terminal 2
+
