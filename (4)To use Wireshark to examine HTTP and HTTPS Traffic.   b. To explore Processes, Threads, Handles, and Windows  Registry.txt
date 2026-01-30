@@ -1,122 +1,136 @@
-============================================================================
-A. Part 1: To use Wireshark to examine HTTP and HTTPS Traffic 
-===========================================================================
-
-ip address 
-
-sudo tcpdump -i eth0 -s 0 -w ~/httpdump.pcap 
-
-
-http://testphp.vulnweb.com/login.php  {Open this in firefox browser in Kali}
-
-
-Enter any random username and password
-
-
-In terminal, 
-
-wireshark httpdump.pcap
-
-
-Apply http filter:
-
-http
-
-
-
-Expand the HTML Form URL 
-Encoded: application/x-www-form-urlencoded section.
-
-
-
-============================================================================
-A. Part2 To use Wireshark to examine HTTP and HTTPS Traffic
-===========================================================================
-
-sudo tcpdump -i eth0 -s 0 -w ~/httpsdump.pcap
-
-
-Open website on firefox
-
-https://www.netacad.com 
-
-
+ A. To use Wireshark to examine HTTP and HTTPS Traffic 
+Procedure: 
+A. Part 1: Capture and View HTTP traffic 
+Step 1: Check for available network interfaces within your kali-linux machine using 
+command: 
+ip address  
  
-In terminal,
+ 
+Step 2: From the above available interfaces, we choose eth0 for this lab, as it is an active 
+network interface and capable of capturing HTTP/HTTPS traffic. 
+ 
+Step 3:Start tcpdump and write to a pcap(httpdump.pcap) file using this command: 
+sudo tcpdump -i eth0 -s 0 -w ~/httpdump.pcap  
+ 
+This command starts tcpdump and records network traffic on the eth0 interface. 
+• The -i command option allows you to specify the interface. If not specified, the tcpdump will 
+capture all traffic on all interfaces. 
+• The -s command option specifies the length of the snapshot for each packet. You should limit 
+snaplen to the smallest number that will capture the protocol information in which you are 
+interested. Setting snaplen to 0 sets it to the default of 262144, for backwards compatibility 
+with recent older versions of tcpdump. 
+• The -w command option is used to write the result of the tcpdump command to a file. 
+Adding the extension .pcap ensures that operating systems and applications will be able to 
+read to file. All recorded traffic will be printed to the file httpdump.pcap in the home 
+directory of the user analyst. 
+ 
+Step 4: To generate HTTP traffic open web browser(Firefox) and open the following 
+website: 
+http://testphp.vulnweb.com/login.php
 
-sudo wireshark httpsdump.pcap
+Because this website uses HTTP, the traffic is not encrypted. Click the Password field to see the 
+warning pop up. 
+ 
+ 
+Step 5: Enter Username and Password both as “Admin” and click Login to submit, then 
+close the browser. 
+ 
+ 
+Step 6: Stop capturing packets by pressing (CTRL + C) inside the terminal. 
+ 
+Step 7: View the HTTP capture stored in the httpdump.pcap file located in the home 
+directory. Open the packet using the option “Open with Wireshark”. 
+
+Step 8: Apply the http filter as shown below 
+ 
+ 
+Step 9: Browse through the different HTTP messages and select the POST message. 
+ 
+Step 10: In the lower window, the message is displayed. Expand the HTML Form URL 
+Encoded: application/x-www-form-urlencoded section. 
+ 
+What two pieces of information are displayed? 
+→ The uname(username) and pass(password) that we entered as “Admin”. 
+Step 11: Close the Wireshark application.
 
 
-Apply filter,
+Part 2. Capture and View HTTPS Traffic 
+Step 1:Start tcpdump to record HTTPS traffic: 
+sudo tcpdump -i eth0 -s 0 -w ~/httpsdump.pcap  
+Step 2: Now, open firefox browser and visit the website: https://www.netacad.com 
+Step 3: Click on Login and enter random credentials as shown below 
+ 
+Step 4: Click Login and close the browser. 
+Step 5: Return to the tcpdump terminal and press Ctrl+C. tcpdump will stop and save 
+~/httpsdump.pcap. 
+ 
+Step 6: Open the pcap in Wireshark and filter HTTPS traffic use following command: 
+sudo wireshark httpsdump.pcap.  
+This will open the captured packets in wireshark 
+Step 7: Apply the filter tcp.port = = 443 to view HTTPS traffic. Browse through the 
+different HTTPS messages and select an Application Data message.
 
-tcp.port = = 443
+Step 8: Completely expand the Transport Layer Security section. 
+If you expand the Application Data, you will see Encrypted Application Data — the 
+payload is not readable (ciphertext). 
+HTTP is replaced by the TLS section and the application data is encrypted and unreadable. 
 
-
-
-
-============================================================================
- Exploring Processes, Threads, Handles, and Windows Registry 
-===========================================================================
-
-
+4B. Exploring Processes, Threads, Handles, and Windows Registry 
 Step 1: Download Windows SysInternals Suite. 
 a. Navigate to the following link to download Windows SysInternals Suite: 
-https://technet.microsoft.com/en-us/sysinternals/bb842062.aspx 
+https://technet.microsoft.com/en-us/sysinternals/bb842062.aspx  
+ 
  
 b. After the download is completed, extract the files from the folder. 
 c. Leave the web browser open for the following steps. 
-
-
-
  
 Step 2: Explore an active process. 
 a. Navigate to the SysinternalsSuite folder with all the extracted files. 
 b. Open procexp.exe. Accept the Process Explorer License Agreement when prompted. 
  
-c. The Process Explorer displays a list of currently active processes. 
- 
-d. Drag this icon      to the web browser to view it in process explorer. In this example 
-the icon was dragged to Google Chrome:  
+c. The Process Explorer displays a list of currently active processes.
+
+d. Drag this icon to the web browser to view it in process explorer. In this example 
+the icon was dragged to Google Chrome: 
  
 e. The Microsoft Edge process can be terminated in the Process Explorer. Right-click the 
 selected process and select Kill Process. 
 
-
- 
+What happened to the web browser window when the process is killed? 
+The web browser window closes. 
 Step 3: Start another process. 
 a. Open a Command Prompt. (Start > search Command Prompt > select Command 
 Prompt) 
-b. Drag the Find Window’s Process icon        into the Command Prompt window and 
+b. Drag the Find Window’s Process icon into the Command Prompt window and 
 locate the highlighted Command Prompt process in Process Explorer. 
 c. The process for the Command Prompt is cmd.exe. Its parent process is explorer.exe 
-process. The cmd.exe has a child process, conhost.exe. 
-  
+process. The cmd.exe has a child process, conhost.exe.
+
 d. Navigate to the Command Prompt window. Start a ping at the prompt and 
 observe the changes under the cmd.exe process. 
-
+What happened during the ping process? 
+A child process PING.EXE listed under the cmd.exe during the ping 
+process. 
 e. As you review the list of active processes, you find that the child process 
-conhost.exe may be suspicious.  To check for malicious content, right
+conhost.exe may be suspicious. To check for malicious content, right- 
 click conhost.exe and select Check VirusTotal. When prompted, 
 click Yes to agree to VirusTotal Terms of Service. Then click OK for the 
-next prompt. 
- 
- 
+next prompt.
 f. Expand the Process Explorer window or scroll to the right until you see the 
 VirusTotal column. Click the link under the VirusTotal column. The default web 
 browser opens with the results regarding the malicious content of conhost.exe. 
-g. Right-click the cmd.exe process and select Kill Process. 
+g. Right-click the cmd.exe process and select Kill Process. What happened to the 
+child process conhost.exe? 
+The child process depends on the parent process. So when the parent process stops, 
+the 
+child process also stops.
 
- 
-=================================================================================== 
 Part 2: Exploring Threads and Handles 
-
-----------------------------------------------------------------------------------
- 
 Step 1: Explore threads. 
 a. Open a command prompt. 
 b. In Process Explorer window, right-click conhost.exe and Select Properties….. Click 
 the Threads tab to view the active threads for the conhost.exe process. 
-
+ 
  
 c. Examine the details of the thread. What type of information is available in the 
 Properties window? 
@@ -125,28 +139,41 @@ performance information, and printable strings.
  
 Step 2: Explore handles. 
 a. In the Process Explorer, click View > select Show Lower Pane > Handles to view 
-the handles associated with the conhost.exe process. 
- 
-================================================================================= 
+the handles associated with the conhost.exe process.
+
 Part 3: Exploring Windows Registry 
 The Windows Registry is a hierarchical database that stores most of the operating systems 
 and desktop environment configuration settings. In this part, you will 
- 
 a. To access the Windows Registry, click Start > Search for regedit and select Registry 
 Editor. Click Yes when asked to allow this app to make changes. 
  
- 
+
+-------------------------------------------------------------------------------------------
+
+The Registry Editor has five hives. These hives are at the top level of the registry. 
+• HKEY_CLASSES_ROOT is actually the Classes subkey of 
+HKEY_LOCAL_MACHINE\Software\. It stores information used by registered 
+applications like file extension association, as well as a programmatic identifier 
+(ProgID), Class ID (CLSID), and Interface ID (IID) data. 
+• HKEY_CURRENT_USER contains the settings and configurations for the users 
+who are currently logged in. 
+• HKEY_LOCAL_MACHINE stores configuration information specific to the local 
+computer. 
+• HKEY_USERS contains the settings and configurations for all the users on the 
+local computer. 
+• HKEY_CURRENT_USER is a subkey of HKEY_USERS. 
+• HKEY_CURRENT_CONFIG stores the hardware information that is used at 
+bootup by the local computer. 
+
+-----------------------------------------------------------------------------------------
 b. In a previous step, you had accepted the EULA(End-User License Agreement) for 
 Process Explorer. Navigate to the EulaAccepted registry key for Process Explorer. 
- 
 Click to select Process Explorer in HKEY_CURRENT_USER > Software > Sysinternals > 
 Process Explorer. Scroll down to locate the key EulaAccepted. Currently, the value for the 
-registry key EulaAccepted is 0x00000001(1). 
-  
- 
+registry key EulaAccepted is 0x00000001(1).
+
 c. Double-click EulaAccepted registry key. Currently the value data is set to 1. The value 
 of 1 indicates that the EULA has been accepted by the user. 
- 
  
  
 d. Change the 1 to 0 for Value data. The value of 0 indicates that the EULA was not 
@@ -159,4 +186,5 @@ What is value for this registry key in the Data column?
 e. Open the Process Explorer. Navigate to the folder where you have downloaded 
 SysInternals. Open the folder SysInternalsSuite > Open procexp.exe. 
  
-
+When you open the Process Explorer, what did you see? 
+The Process Explorer License Agreement dialog box
