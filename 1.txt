@@ -2,10 +2,11 @@
 A. Encrypting and decrypting data using a hacker tool
 ===================================================================
 
+Step 1:Open Kali Linux Terminal and proceed by creating a new directory named “Zip-Files” using command:
 
 mkdir Zip-Files
 
-
+Step 2:Move into the directory and create text files using the following command: 
 cd Zip-Files 
 echo This is a sample text file > sample-1.txt 
 echo This is a sample text file > sample-2.txt 
@@ -15,16 +16,22 @@ echo This is a sample text file > sample-3.txt
 ls
 
 
+Step 3:Zip and encrypt the files 
 zip -e file-1.zip sample* 
 
 ls
 
-
+Step 4: Attempt to open zip files using an incorrect password as shown. 
 unzip file-1.zip 
 
+
+Step 5: Recover Encrypted Zip File Passwords (fcrackzip- recovers the 
+passwords of encrypted zip) 
+
+Install fcrackzip tool using command: 
 sudo apt install fcrackzip 
 
-
+To recover password use the following command: 
 fcrackzip -vul 1-4 file-1.zip 
 
 
@@ -35,38 +42,55 @@ fcrackzip -vul 1-4 file-1.zip
 B. Encrypting and Decrypting Data Using OpenSSL 
 ===================================================================
 
+Step 1: Encrypt the text file (cd– to enter the file, cat– to read the file, openssl– will 
+ask password, aes-256- to encrypt the text file,-in– input,-out- output). 
+ 
+a. Make the directory “OpenSSL” and enter the directory using the following 
+commands:
 
 mkdir OpenSSL 
 cd OpenSSL
 
+Create a text file named “letter_to_grandma.txt” using Nano Editor and 
+write down the contents in file 
 
 sudo nano letter_to_grandma.txt 
 
-
-
+Content of file in nano editor:
 Hi Grandma, 
 I am writing this letter to thank you for the chocolate chip cookies you sent 
 me. I got them this morning and I have already eaten half of the box! They 
 are absolutely delicious! 
- 
 I wish you all the best. Love, 
 Your cookie-eater grandchild. 
 
+Exit Nano Editor: CTRL + O > ENTER > CTRL+X.
 
 
-
+Verify the contents of the file using command: 
 cat letter_to_grandma.txt 
 
 
+Encrypt the text file with OPENSSL using the following command:
 openssl aes-256-cbc -in letter_to_grandma.txt -out message.enc 
 
+Enter any password of your choice. Example: kali
 
+
+When the process is finished, use the cat command again to display the 
+contents of the message.enc file. 
 cat message.enc
 
 
+Decrypt the encrypted letter using OpenSSL 
+ 
+a. Use the following command to decrypt the encrypted message and store the 
+decrypted contents in the file: decrypted_letter.txt: 
 openssl aes-256-cbc -d -in message.enc -out decrypted_letter.txt 
 
 
+Use the cat command to verify the contents of the decrypted 
+letter(decrypted_letter.txt)
 cat decrypted_letter.txt 
 
 
@@ -78,28 +102,44 @@ C. Hashing a text file with openssl and verifying hashes (hash- a fixed-size,
 unique string of characters) 
 ===================================================================
 
-
+Step 1:Verify the contents of letter_to_grandma.txt using cat command. 
 cat letter_to_grandma.txt 
 
+Issue the command below to hash the text file. The command will use 
+SHA-2-256 as the hashing algorithm to generate a hash of the text file. 
 
 openssl sha256 letter_to_grandma.txt
 
 
+A hashing algorithm with longer bit-length, such as SHA-2-512, can also be 
+used. To generate a SHA-2-512 hash of the letter_to_grandma.txt file, use the 
+command below:
+
 openssl sha512 letter_to_grandma.txt 
+
+
+Use sha256sum and sha512sum to generateSHA-2-256 and SHA-2-512 
+hash of the letter_to_grandma.txt file:
 
 sha256sum letter_to_grandma.txt 
 sha512sum letter_to_grandma.txt 
 
 
+ Generate sample img file using commands: 
 dd if=/dev/zero of=sample.img bs=1M count=1 
 
+
+Generate a SHA-256 hash file
 sha256sum sample.img > sample.img_SHA256.sig 
 
+Use the cat command to display the contents of the sample.img_SHA256.sig file: 
 cat sample.img_SHA256.sig 
 
 
+Use SHA256sum to calculate the SHA-2-256 hash of the sample.img file: 
 sha256sum sample.img 
 
 
 
+Compare this output to the .sig file: if they match, the file hasn’t been modified. This is how you verify integrity. 
 
