@@ -1,7 +1,7 @@
 Objective: To configure your Linux system to send syslog messages to a syslog server and 
 read them.  
 Procedure: 
-Step 1: Ensure all steps in Practical 5, were correctly executed 
+Step 1: Ensure all steps in Practical 6, were correctly executed 
 Step 2: Verify whether syslog server is running: 
 sudo systemctl status rsyslog 
  
